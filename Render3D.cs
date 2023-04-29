@@ -4,16 +4,17 @@ using static MathVec;
 
 static class Render3D
 {
-    const int Width = 120*3;
-    const int Height = 30*3;
+    const int Width = 120*2;
+    const int Height = 30*2;
+    const short SizeFont = 8;
+    const float speed = 0.05f;
     const int Light = 1;
     private static float aspect = Width / Height;
     private static float aspectPixel = 11.0f / 24.0f;
     private static string Gradient = " .:!/r(l1Z4H9W8$@";
     static public void Render()
     {
-        CreateBuffer(Width, Height);
-        float speed = 0.1f;
+        CreateBuffer(Width, Height, SizeFont);
         var obj = ListObjects.posAllObject;
         long t = 0;
         int len = Gradient.Length - 1;

@@ -3,6 +3,11 @@ using System.Runtime.InteropServices;
 //Не мое, нашел в инете
 public static class ConsoleHelper
 {
+    #region strucr
+    private enum StdHandle
+    {
+        OutputHandle = -11
+    }
     [StructLayout(LayoutKind.Sequential)]
     public struct COORD
     {
@@ -18,6 +23,34 @@ public static class ConsoleHelper
         public short Right;
         public short Bottom;
     }
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct FontInfo
+    {
+        internal int cbSize;
+        internal int FontIndex;
+        internal short FontWidth;
+        public short FontSize;
+        public int FontFamily;
+        public int FontWeight;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.wc, SizeConst = 32)]
+        public string FontName;
+    }
+    #endregion
+    #region ImportDLL
+    [DllImport("kernel32.dll", SetLastError = true)]
+    internal static extern IntPtr GetStdHandle(int nStdHandle);
+
+    [return: MarshalAs(UnmanagedType.Bool)]
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    internal static extern bool SetCurrentConsoleFontEx(IntPtr hConsoleOutput, bool MaximumWindow, ref FontInfo ConsoleCurrentFontEx);
+
+    [DllImport("kernel32")]
+    private extern static bool SetConsoleFont(IntPtr hOutput, uint index);
+
+    [return: MarshalAs(UnmanagedType.Bool)]
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    internal static extern bool GetCurrentConsoleFontEx(IntPtr hConsoleOutput, bool MaximumWindow, ref FontInfo ConsoleCurrentFontEx);
 
     [DllImport("kernel32.dll", SetLastError = true)]
     static extern IntPtr CreateConsoleScreenBuffer(uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwFlags, IntPtr lpScreenBufferData);
@@ -33,16 +66,7 @@ public static class ConsoleHelper
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool SetConsoleWindowInfo(IntPtr hConsoleOutput, bool bAbsolute, [In] ref SMALL_RECT lpConsoleWindow);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr GetStdHandle(int nStdHandle);
-
-    private const int STD_OUTPUT_HANDLE = -11;
-
-    const int GENERIC_READ = unchecked((int)0x80000000);
-    const int GENERIC_WRITE = 0x40000000;
-    private static int WIDHT;
-    private static int HEIGHT;
+  
     [DllImport("Kernel32.dll")]
     private static extern IntPtr CreateConsoleScreenBuffer(
         int dwDesiredAccess, int dwShareMode,
@@ -55,12 +79,24 @@ public static class ConsoleHelper
         IntPtr hConsoleOutput, string lpBuffer,
         uint nNumberOfCharsToWrite, out uint lpNumberOfCharsWritten,
         IntPtr lpReserved);
+    #endregion
+    #region const
+    private static readonly IntPtr ConsoleOutputHandle = GetStdHandle(StandardOutputHandle);
     private static IntPtr screen;
     private static IntPtr hConsole;
-    public static void CreateBuffer(int widht, int height)
+    private const int STD_OUTPUT_HANDLE = -11;
+    private const int FixedWidthTrueType = 54;
+    private const int StandardOutputHandle = -11;
+    const int GENERIC_READ = unchecked((int)0x80000000);
+    const int GENERIC_WRITE = 0x40000000;
+    private static int WIDHT;
+    private static int HEIGHT;
+    #endregion
+    public static void CreateBuffer(int widht, int height, short SizeForn = 8)
     {
         WIDHT = widht;
         HEIGHT = height;
+        SetCurrentFont("Consolas", SizeForn);
         SetWindow(WIDHT, HEIGHT);
         screen = Marshal.AllocHGlobal(WIDHT * HEIGHT);
         hConsole = CreateConsoleScreenBuffer(0x40000000, 0x00000002, IntPtr.Zero, 0x00000001, IntPtr.Zero);
@@ -91,5 +127,40 @@ public static class ConsoleHelper
         IntPtr handle = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleScreenBufferSize(handle, coord);
         SetConsoleWindowInfo(handle, true, ref rect);
+    }
+    public static FontInfo[] SetCurrentFont(string font, short fontSize = 0)
+    {
+        FontInfo before = new FontInfo
+        {
+            cbSize = Marshal.SizeOf<FontInfo>()
+        };
+        if (GetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref before))
+        {
+            FontInfo set = new FontInfo
+            {
+                cbSize = Marshal.SizeOf<FontInfo>(),
+                FontIndex = 0,
+                FontFamily = FixedWidthTrueType,
+                FontName = font,
+                FontWeight = 400,
+                FontSize = fontSize > 0 ? fontSize : before.FontSize
+            };
+            if (!SetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref set))
+            {
+                var ex = Marshal.GetLastWin32Error();
+                throw new System.ComponentModel.Win32Exception(ex);
+            }
+            FontInfo after = new FontInfo
+            {
+                cbSize = Marshal.SizeOf<FontInfo>()
+            };
+            GetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref after);
+            return new[] { before, set, after };
+        }
+        else
+        {
+            var er = Marshal.GetLastWin32Error();
+            throw new System.ComponentModel.Win32Exception(er);
+        }
     }
 }
