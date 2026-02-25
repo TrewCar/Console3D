@@ -94,6 +94,7 @@ public static class ConsoleHelper
     #endregion
     public static void CreateBuffer(int widht, int height, short SizeForn = 8)
     {
+        #if WINDOWS
         WIDHT = widht;
         HEIGHT = height;
         SetCurrentFont("Consolas", SizeForn);
@@ -101,6 +102,9 @@ public static class ConsoleHelper
         screen = Marshal.AllocHGlobal(WIDHT * HEIGHT);
         hConsole = CreateConsoleScreenBuffer(0x40000000, 0x00000002, IntPtr.Zero, 0x00000001, IntPtr.Zero);
         SetConsoleActiveScreenBuffer(hConsole);
+        #else
+        Console.Write(screen);
+        #endif
     }
     public static void PrintConsole(string[] screen)
     {

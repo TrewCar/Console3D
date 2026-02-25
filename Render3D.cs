@@ -1,11 +1,15 @@
 ﻿using System.Numerics;
+#if WINDOWS
 using static ConsoleHelper;
+#elif UNIX
+using static ConsoleHelperUnix;
+#endif
 using static MathVec;
 
 static class Render3D
 {
-    const int Width = 120*2;
-    const int Height = 30*2;
+    static int Width = Console.WindowWidth;
+    static int Height = Console.WindowHeight;
     const short SizeFont = 8;
     const float speed = 0.05f;
     const int Light = 1;
@@ -73,7 +77,13 @@ static class Render3D
                             ro = ro + rd * (minIt - 0.01f);
                             rd = Reflect(rd, n);
                         }
-                        else break;
+                        else
+                        {
+                            #if DARKMODE
+                            diff = 0;
+                            #endif
+                            break;
+                        }
                     }
                     int color = (int)(diff * 20f);
                     color = Clamp(color, 0, Gradient.Length - 1);
