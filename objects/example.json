@@ -1,0 +1,32 @@
+[
+    {"position": [0, 3, 0], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, 0, 0], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, 0, 0], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, 3, 0], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, -3, 0], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, -3, 0], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, 3, 0], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [0, -3, 0], "name": "Sphere", "size": [1, 1, 1]},
+
+    {"position": [0, 3, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, 0, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, 0, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, 3, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, -3, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, -3, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, 3, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [0, -3, -3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [0, 0, -3], "name": "Sphere", "size": [1, 1, 1]},
+
+    {"position": [0, 3, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, 0, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, 0, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, 3, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, -3, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [3, -3, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [-3, 3, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [0, -3, 3], "name": "Sphere", "size": [1, 1, 1]},
+    {"position": [0, 0, 3], "name": "Sphere", "size": [1, 1, 1]},
+
+    {"position": [0, 0, 0], "name": "Box", "size": [1, 1, 1]}
+]
