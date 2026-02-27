@@ -1,10 +1,7 @@
 ﻿using System.Numerics;
-#if WINDOWS
-using static ConsoleHelper;
-#elif UNIX
-using static ConsoleHelperUnix;
-#endif
 using static MathVec;
+using System.Runtime.InteropServices;
+using Microsoft.VisualBasic;
 
 static class Render3D
 {
@@ -16,9 +13,11 @@ static class Render3D
     private static float aspect = Width / Height;
     private static float aspectPixel = 11.0f / 24.0f;
     private static string Gradient = " .:!/r(l1Z4H9W8$@";
+    
     static public void Render()
     {
-        CreateBuffer(Width, Height, SizeFont);
+        IConsoleHelper ConsoleHelper = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new ConsoleHelperWin() : new ConsoleHelperUnix();
+        ConsoleHelper.CreateBuffer(Width, Height, SizeFont);
         var obj = ListObjects.posAllObject;
         long t = 0;
         int len = Gradient.Length - 1;
@@ -91,7 +90,7 @@ static class Render3D
                     screen[i + j * Width] = pixel;
                 }
             }
-            PrintConsole(screen);
+            ConsoleHelper.PrintConsole(screen);
         }
     }
 }
