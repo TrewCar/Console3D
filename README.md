@@ -1,3 +1,5 @@
 # Console3D
 
-framework net7.0
+framework net8.0
+<br>
+dotnet run -p:DefineConstants="DARKMODE UNIX"

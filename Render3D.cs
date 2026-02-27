@@ -1,20 +1,23 @@
 ﻿using System.Numerics;
-using static ConsoleHelper;
 using static MathVec;
+using System.Runtime.InteropServices;
+using Microsoft.VisualBasic;
 
 static class Render3D
 {
-    const int Width = 120*2;
-    const int Height = 30*2;
+    static int Width = Console.WindowWidth;
+    static int Height = Console.WindowHeight;
     const short SizeFont = 8;
     const float speed = 0.05f;
     const int Light = 1;
     private static float aspect = Width / Height;
     private static float aspectPixel = 11.0f / 24.0f;
     private static string Gradient = " .:!/r(l1Z4H9W8$@";
+    
     static public void Render()
     {
-        CreateBuffer(Width, Height, SizeFont);
+        IConsoleHelper ConsoleHelper = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new ConsoleHelperWin() : new ConsoleHelperUnix();
+        ConsoleHelper.CreateBuffer(Width, Height, SizeFont);
         var obj = ListObjects.posAllObject;
         long t = 0;
         int len = Gradient.Length - 1;
@@ -73,7 +76,13 @@ static class Render3D
                             ro = ro + rd * (minIt - 0.01f);
                             rd = Reflect(rd, n);
                         }
-                        else break;
+                        else
+                        {
+                            #if DARKMODE
+                            diff = 0;
+                            #endif
+                            break;
+                        }
                     }
                     int color = (int)(diff * 20f);
                     color = Clamp(color, 0, Gradient.Length - 1);
@@ -81,7 +90,7 @@ static class Render3D
                     screen[i + j * Width] = pixel;
                 }
             }
-            PrintConsole(screen);
+            ConsoleHelper.PrintConsole(screen);
         }
     }
 }
