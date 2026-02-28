@@ -8,6 +8,7 @@ class Program
     static void Main() => Render3D.Render(); 
     // static void Main()
     // {
-    //     ListObjects.method();
+    //     ILoader loaderManager = new Loader();
+    //     loaderManager.FolderReader("./objects");
     // }
 }

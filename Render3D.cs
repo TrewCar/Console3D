@@ -18,7 +18,8 @@ static class Render3D
     {
         IConsoleHelper ConsoleHelper = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new ConsoleHelperWin() : new ConsoleHelperUnix();
         ConsoleHelper.CreateBuffer(Width, Height, SizeFont);
-        var obj = ListObjects.method();
+        ILoader loader = new Loader();
+        var obj = loader.ObjectReader("./objects/example.json");
         long t = 0;
         int len = Gradient.Length - 1;
         while (true)
