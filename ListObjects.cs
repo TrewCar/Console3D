@@ -14,7 +14,7 @@ class ListObjects
     static public (Vector3 pos, string name, Vector3 size)[] posAllObject_ = {};
     public static (Vector3 pos, string name, Vector3 size)[] method()
     {
-        string filePath = "/Users/sai/Documents/Console3D/objects/example.json";
+        string filePath = "./objects/example.json";
         string fileContents = File.ReadAllText(filePath);
         JArray jArray = JArray.Parse(fileContents);
         SceneObject sceneObject = new SceneObject();

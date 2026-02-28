@@ -12,6 +12,7 @@
 .DS_Store
 objects/*
 !objects/example.json
+!objects/arch.json
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

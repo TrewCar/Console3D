@@ -33,7 +33,7 @@ static class Render3D
                 {
                     Vector2 uv = new Vector2(i, j) / new Vector2(Width, Height) * 2.0f - Vector2.One;
                     uv.X *= aspect * aspectPixel;
-                    Vector3 ro = new Vector3(-14, 0, 0);
+                    Vector3 ro = new Vector3(-24, 0, 0);
                     Vector3 rd = Normalize(new Vector3(2, uv.X, uv.Y));
                     ro = RotateY(ro, 0.25f);
                     rd = RotateY(rd, 0.25f);
