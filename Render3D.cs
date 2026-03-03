@@ -19,7 +19,7 @@ static class Render3D
         IConsoleHelper ConsoleHelper = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new ConsoleHelperWin() : new ConsoleHelperUnix();
         ConsoleHelper.CreateBuffer(Width, Height, SizeFont);
         ILoader loader = new Loader();
-        var obj = loader.ObjectReader("./objects/example.json");
+        var obj = loader.ObjectReader("./objects/arch.json");
         long t = 0;
         int len = Gradient.Length - 1;
         while (true)
@@ -45,7 +45,7 @@ static class Render3D
                     ro = RotateX(ro, t * speed);
                     rd = RotateX(rd, t * speed);
                     float diff = 1f;
-                    Array.Sort(obj, (a,b) => Vector3.Distance(b.pos,ro).CompareTo(Vector3.Distance(a.pos, ro)));
+                    Array.Sort(obj.ToArray(), (a,b) => Vector3.Distance(b.Position,ro).CompareTo(Vector3.Distance(a.Position, ro)));
 
                     for (int k = 0; k < Light; k++)
                     {
@@ -54,15 +54,15 @@ static class Render3D
                         float albedo = 1f;
                         Vector2 intersection = new();
 
-                        for (int q = 0; q < obj.Length; q++)
+                        for (int q = 0; q < obj.Count(); q++)
                         {
-                            switch (obj[q].name)
+                            switch (obj[q].Name)
                             {
                                 case "Sphere":
-                                    Object.CreateSphere(ro, rd, ref intersection, ref n, ref minIt, obj[q].pos, obj[q].size);
+                                    Object.CreateSphere(ro, rd, ref intersection, ref n, ref minIt, obj[q].Position, obj[q].Size);
                                     break;
                                 case "Box":
-                                    Object.CreateBox(ro, rd, ref intersection, ref n, ref minIt, obj[q].size, obj[q].pos);
+                                    Object.CreateBox(ro, rd, ref intersection, ref n, ref minIt, obj[q].Size, obj[q].Position);
                                     break;
                                 default:
                                     break;
